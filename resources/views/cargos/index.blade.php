@@ -41,4 +41,6 @@
             @endforeach
         </tbody>
     </table>
+
+    {{ $funcionarios->links() }}
 @endsection
