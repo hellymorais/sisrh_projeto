@@ -8,7 +8,8 @@
         <x-slot name="title">Cadastrar Funcionário</x-slot>
      </x-btn-create>
 
-    <h1 class="f-2 mb-3">Funcionários</h1>
+    <h1 class="f-2 mb-3">Lista Funcionários</h1>
+    <p>Total de Funcionários: {{ $totalFuncionarios }}</p>
 
     @if (Session::get('sucesso'))
      <div class="alert alert-success text-center">{{ Session::get('sucesso') }}</div>
