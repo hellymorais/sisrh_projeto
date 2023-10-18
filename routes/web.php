@@ -4,6 +4,7 @@ use App\Http\Controllers\CargoController;
 use App\Http\Controllers\DepartamentoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FuncionarioController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsuarioController;
 
 /*
@@ -16,10 +17,12 @@ use App\Http\Controllers\UsuarioController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', [LoginController::class, 'index'])->name('login.index');
+Route::post('/auth', [LoginController::class, 'auth'])->name('login.auth');
+Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
 
-Route::get('/', function () {
-    return view('login');
-});
+
+
 
 Route::get('/funcionarios', [FuncionarioController::class, 'index'])->name('funcionarios.index');
 Route::get('/funcionarios/create', [FuncionarioController::class, 'create'])->name('funcionarios.create');
@@ -45,3 +48,5 @@ Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.st
 Route::get('/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
 Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
 Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
+
+
