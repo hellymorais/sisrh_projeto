@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class CargoController extends Controller
 {
+    public function __construct()
+    {
+         $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -79,7 +83,7 @@ class CargoController extends Controller
     public function destroy(string $id)
     {
         $cargo = Cargo::find($id);
- 
+
         $cargo->delete();
 
         return redirect()->route('cargos.index')->with('sucesso', 'Cargo excluido com sucesso.');

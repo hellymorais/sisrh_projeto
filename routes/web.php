@@ -19,7 +19,7 @@ use App\Http\Controllers\UsuarioController;
 */
 Route::get('/', [LoginController::class, 'index'])->name('login.index');
 Route::post('/auth', [LoginController::class, 'auth'])->name('login.auth');
-Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
 
 
 
