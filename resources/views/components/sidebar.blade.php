@@ -6,7 +6,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="#" class="nav-link text-white btn btn-primary text-start">
+            <a href="{{ route('dashboard.index') }}" class="nav-link text-white btn btn-primary text-start">
                 <i class="bi bi-bar-chart mx-2 fs-5 align-middle"></i>Dashboard
             </a>
         </li>
@@ -37,7 +37,7 @@
             </a>
         </li>
         @endcan
-        
+
     </ul>
     <hr>
     <div class="dropdown">

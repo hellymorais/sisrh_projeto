@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UsuarioController extends Controller
 {
@@ -11,31 +12,29 @@ class UsuarioController extends Controller
     {
          $this->middleware('auth');
     }
-     /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
+        if(Gate::allows('type-user')){
         $usuarios = User::all()->sortBy('name');
-
         return view('usuarios.index', compact('usuarios'));
+        }else{
+            return back();
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
+        if(Gate::allows('type-user')){
+        $user = new User();
         return view('usuarios.create');
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $input = $request->toArray(); //Array que recebe os valores dos campos da view através do objeto request
-
+        $input = $request->toArray();
         $input['password'] = bcrypt($input['password']); // Linha que criptografa a senha do usuário com o método bcrypt, antes de guardar no banco
 
         // Insert de dados do usuário no banco
@@ -72,18 +71,23 @@ class UsuarioController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::find($id);
-
+        $input = $request->all();
         $user->name = $request->input('name');
 
         if ($request->has('password')) {
             $user->password = bcrypt($request->input('password'));
         }
-
-        $user->tipo = $request->input('tipo');
-
+        $user->fill($input);
         $user->save();
 
+        $user->tipo = $request->input('tipo');
+        $user->save();
+
+        if($input['type'] =="admin"){
         return redirect()->route('usuarios.index')->with('sucesso', 'Usuário alterado com sucesso!');
+        }else{
+            return redirect()->route('usuarios.index', $user->id)->with('sucesso', 'Usuário alterado com sucesso!');
+        }
     }
 
     /**
