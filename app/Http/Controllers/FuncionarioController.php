@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Departamento;
 use App\Models\Cargo;
+use App\Models\Beneficio;
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -36,7 +37,8 @@ class FuncionarioController extends Controller
         //Retornar o formulário do Cadastro de funcionário
         $departamentos = Departamento::all()->sortBy('nome');
         $cargos = Cargo::all()->sortBy('descricao');
-        return view('funcionarios.create', compact('departamentos','cargos'));
+        $beneficios = Beneficio::all()->sortBy('descricao');
+        return view('funcionarios.create', compact('departamentos','cargos','beneficios'));
     }
 
     /**
@@ -47,7 +49,7 @@ class FuncionarioController extends Controller
         $input = $request->toArray();
         // dd($input);
 
-        $input['user_id'] = 1;
+        $input['user_id'] = auth()->user()->id;
 
         if($request->hasFile('foto')) {
             $input['foto'] = $this->uploadFoto($request->foto);
@@ -55,6 +57,12 @@ class FuncionarioController extends Controller
 
         // Insert de dados do usuário no banco
         Funcionario::create($input);
+
+        if($request->beneficios){
+            //Cadastro do funcionarios com os beneficios
+            $funcionario->beneficios()->attach($request->beneficios);
+
+        }
 
         return redirect()->route('funcionarios.index')->with('sucesso','Funcionário Cadastrado com Sucesso');
     }

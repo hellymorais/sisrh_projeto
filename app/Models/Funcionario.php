@@ -22,4 +22,8 @@ class Funcionario extends Model
     public function cargo() {
         return $this->belongsTo(Cargo::class);
     }
+    public function beneficios() {
+        return $this->belongsTo(Beneficios::class);
+    }
+
 }

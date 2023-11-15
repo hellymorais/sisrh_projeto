@@ -42,5 +42,5 @@
         </tbody>
     </table>
 
-    {{ $funcionarios->links() }}
+    {{ $cargos->links() }}
 @endsection

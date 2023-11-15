@@ -70,7 +70,15 @@
         <img src="{{ asset('images/sombra_funcionario.jpg') }}" alt="foto padrão" class="img-thumbnail">
     @endif
   </div>
-  <div class="col-md-10">
+  <div class="col-md-6">
     <label for="foto" class="form-label">Foto</label>
     <input type="file" class="form-control" id="foto" name="foto">
   </div>
+  <div class="col-mf-4">
+    <label for="beneficios">Beneficios</label>
+  </div>
+       @foreach ( $beneficios as $beneficio)
+          <input type="checkbox" value="{{ $beneficio->id }}" name="beneficios[]"> {{ $beneficio->descricao }}<br>
+       @endforeach
+
+</div> 
