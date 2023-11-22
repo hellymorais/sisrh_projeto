@@ -7,19 +7,22 @@ use Illuminate\Http\Request;
 
 class CargoController extends Controller
 {
+    /* Verificar se o usuário estar logado no sistema */
     public function __construct()
     {
-         $this->middleware('auth');
+        $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $cargos = Cargo::where('descricao', 'like','%'. $request->busca. '%')
-        ->orderBy('descricao', 'asc')->paginate(3);
+        $cargos = Cargo::where('descricao', 'like', '%'.$request->busca.'%')->orderby('descricao', 'asc')->paginate(10);
+
         $totalCargos = Cargo::all()->count();
 
+        // Receber os dados do banco através do model
         return view('cargos.index', compact('cargos', 'totalCargos'));
     }
 
@@ -28,6 +31,7 @@ class CargoController extends Controller
      */
     public function create()
     {
+        //Retornar o formulário do Cadastro de Cargo
         return view('cargos.create');
     }
 
@@ -37,7 +41,9 @@ class CargoController extends Controller
     public function store(Request $request)
     {
         $input = $request->toArray();
+        // dd($input);
 
+        // Insert de dados do usuário no banco
         Cargo::create($input);
 
         return redirect()->route('cargos.index')->with('sucesso','Cargo Cadastrado com Sucesso');
@@ -85,7 +91,9 @@ class CargoController extends Controller
     public function destroy(string $id)
     {
         $cargo = Cargo::find($id);
+        // dd($funcionario);
 
+        //Apagando o registro no banco de dados
         $cargo->delete();
 
         return redirect()->route('cargos.index')->with('sucesso', 'Cargo excluido com sucesso.');

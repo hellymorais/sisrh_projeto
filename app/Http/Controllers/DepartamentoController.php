@@ -7,18 +7,23 @@ use Illuminate\Http\Request;
 
 class DepartamentoController extends Controller
 {
+    /* Verificar se o usuário estar logado no sistema */
     public function __construct()
     {
-         $this->middleware('auth');
+        $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departamentos = Departamento::all()->sortBy('nome');
+        $departamentos = Departamento::where('nome', 'like', '%'.$request->busca.'%')->orderby('nome', 'asc')->paginate(10);
 
-        return view('departamentos.index', compact('departamentos'));
+        $totalDepartamentos = Departamento::all()->count();
+
+        // Receber os dados do banco através do model
+        return view('departamentos.index', compact('departamentos', 'totalDepartamentos'));
     }
 
     /**
@@ -35,7 +40,9 @@ class DepartamentoController extends Controller
     public function store(Request $request)
     {
         $input = $request->toArray();
+        // dd($input);
 
+        // Inserir os dados do departamento no banco
         Departamento::create($input);
 
         return redirect()->route('departamentos.index')->with('sucesso','Departamento Cadastrado com Sucesso');
@@ -83,7 +90,9 @@ class DepartamentoController extends Controller
     public function destroy(string $id)
     {
         $departamento = Departamento::find($id);
+        // dd($funcionario);
 
+        //Apagando o registro no banco de dados
         $departamento->delete();
 
         return redirect()->route('departamentos.index')->with('sucesso', 'Departamento excluido com sucesso.');

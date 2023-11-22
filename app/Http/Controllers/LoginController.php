@@ -14,31 +14,30 @@ class LoginController extends Controller
 
     public function auth(Request $request)
     {
-        $crendencias = $request->validate([
-           'email' => [ 'required', 'email'],
-           'password' => ['required']
-
+        // dd($request);
+        $credenciais = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
         ],
         [
             'email.required' => 'O campo e-mail é obrigatório',
-            'email.email' => 'O e-mail informado não é válido',
+            'email.email' => 'O e-mail informado não é valido',
             'password.required' => 'O campo senha é obrigatório'
         ]);
 
-        if(Auth::attempt($crendencias)){
+        if(Auth::attempt($credenciais)){
             $request->session()->regenerate();
-            return redirect()->route('funcionarios.index');
-        }  else {
-             return redirect()->back()->with('erro', 'E-mail ou senha inválida');
+            return redirect()->route('dashboard.index');
+        } else {
+            return redirect()->back()->with('erro_login', 'E-mail ou senha inválido');
         }
-
-        }
-        public function logout(Request $request)
-            {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-                return redirect()->route('login.index');
-            }
     }
-
+    // Função para deslogar o usuário logado
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login.index');
+    }
+}

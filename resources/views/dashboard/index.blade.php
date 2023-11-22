@@ -1,6 +1,6 @@
 @extends('layouts.default')
 
-@section('title', 'SishRH - Dashboard');
+@section('title', 'Dashboard - SISRH ')
 
 @section('content')
 <h1 class="mb-5">Dashboard</h1>
@@ -40,8 +40,8 @@
         <div class="bg-success shadow p-3 text-center text-white d-flex d-flex g-5 align-items-center rounded">
             <i class="bi bi-currency-dollar fs-1 me-3"></i>
             <div class="w-100">
-                <span class="fs-5 d-block">Total Salário</span>
-                <span class="fs-2"><b>{{ number_format($somaSalarios, 2, '.', '.')}}</b></span>
+                <span class="fs-5 d-block">Total Salários:</span>
+                <span class="fs-2"><b>{{ number_format($somaSalarios, 2, ',', '.') }}</b></span>
             </div>
         </div>
     </div>
@@ -70,11 +70,21 @@
         new Chart(graficoDepartamentos, {
             type: 'bar',
             data: {
-                labels: ['jan', 'fev'],
+                //labels: ['jan', 'fev', 'março'],
+                labels: [
+                    @foreach ($departamentos as $departamento)
+                        '{{ $departamento->nome }}',
+                    @endforeach
+                ],
                 datasets: [{
                     axis: 'y',
                     label: '',
-                    data: [10, 50],
+                    // data: [10, 50, 20],
+                    data: [
+                        @foreach ($departamentos as $departamento)
+                            {{ $departamento->funcionariosAtivos->count(); }},
+                        @endforeach
+                    ],
                     fill: false,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -112,10 +122,20 @@
         new Chart(graficoCargos, {
             type: 'doughnut',
             data: {
-                labels: ['jan', 'fev'],
+                // labels: ['jan', 'fev'],
+                labels: [
+                    @foreach ($cargos as $cargo)
+                        '{{ $cargo->descricao }}',
+                    @endforeach
+                ],
                 datasets: [{
                     label: '',
-                    data: [20, 30],
+                    // data: [20, 30],
+                    data: [
+                        @foreach ($cargos as $cargo)
+                            {{ $cargo->funcionariosAtivos->count(); }},
+                        @endforeach
+                    ],
                     backgroundColor: [
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
@@ -131,5 +151,4 @@
         });
     </script>
 </div>
-
 @endsection
